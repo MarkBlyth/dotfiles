@@ -1,0 +1,1 @@
+/home/mark/.config/awesome/rc.lua
