@@ -10,8 +10,8 @@ Plugin 'VundleVim/Vundle.vim'
 
 
 Plugin 'terryma/vim-multiple-cursors' " Multiple cursors
-Plugin 'Valloric/YouCompleteMe' " Autocomplete
-
+" Plugin 'Valloric/YouCompleteMe' " Autocomplete
+Plugin 'zxqfl/tabnine-vim' " Autocomplete
 
 " /plugins "
 call vundle#end()
@@ -26,19 +26,3 @@ set et
 set smartindent
 set showmatch
 syntax on
-
-" Bits to get lightline to look nicer
-" set laststatus=2
-" if !has('gui_running')
-"    set t_co=256
-" end
-
-" Stuff for syntastic
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 0
-"let g:syntastic_check_on_wq = 0
-"let g:syntastic_check_on_w = 0
