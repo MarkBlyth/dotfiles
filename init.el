@@ -25,10 +25,11 @@
     ("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
  '(org-agenda-files
    (quote
-    ("~/Files/org/food.org" "~/Files/org/personal.org" "~/Files/org/phd.org")))
+    ("~/OrgFiles/phd.org" "~/OrgFiles/personal.org" "~/OrgFiles/food.org")))
+ '(org-export-backends (quote (ascii beamer html icalendar latex md odt org)))
  '(package-selected-packages
    (quote
-    (org-bullets dashboard evil-visual-mark-mode spacemacs-theme which-key org-agenda-property))))
+    (flycheck blacken elpy python-black auto-complete pdf-tools org-bullets dashboard evil-visual-mark-mode spacemacs-theme which-key org-agenda-property))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -36,6 +37,15 @@
  ;; If there is more than one, they won't work right.
  )
 
+
+;; Autocomplete
+(ac-config-default)
+(global-auto-complete-mode t)
+
+
+;; Open shells in the currently activated window
+(add-to-list 'display-buffer-alist
+             `(,(regexp-quote "*shell") display-buffer-same-window))
 
 ;; which-key
 (setq whick-key-idle-delay 0.05) ; time between pressing a key and bringing up display
@@ -47,6 +57,7 @@
 
 
 ;; evil
+(setq evil-want-C-u-scroll t)
 (require 'evil)
 (evil-mode t)
 
@@ -74,6 +85,24 @@
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
 
+;; elpy (python ide stuff)
+(elpy-enable)
+
+
+;; Automatically run Black on buffer save
+; M-x package-install blacken
+(add-hook 'elpy-mode-hook
+          '(lambda ()
+             (when (eq major-mode 'python-mode)
+               (add-hook 'before-save-hook 'elpy-black-fix-code))))
+
+
+;; flycheck (on-the-fly syntax checking)
+(when (require 'flycheck nil t)
+  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+  (add-hook 'elpy-mode-hook 'flycheck-mode))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; Config
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -91,6 +120,7 @@
 (tool-bar-mode -1)
 (toggle-scroll-bar -1)
 (menu-bar-mode -1)
+(global-linum-mode t)
 
 ;; org hotkeys
 (global-set-key (kbd "C-c l") 'org-store-link)
@@ -99,7 +129,8 @@
 
 ;; TODOs
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "IN-PROGRESS(p)" "WAITING(w)" "|" "DONE(d)" "ABANDONED(a)")
-        (sequence "START(s)" "FINISH(f)" "|" "READ(r)"))
+      '((sequence "TODO(t)" "|" "DONE(d)")
+        (sequence "PENDING(p)" "|" "CLAIMED")
+        (sequence "WRITE(W)" "WRITING(w)" "REWRITE(R)" "|" "COMPLETED(c)"))
 )
 
