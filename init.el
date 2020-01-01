@@ -3,8 +3,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-;; Codes required for installing packages from MELPA
-
+;; Installing packages from MELPA
+;; (also some emacs auto-generated stuff?)
 (require 'package)
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
                     (not (gnutls-available-p))))
@@ -38,69 +38,109 @@
  )
 
 
+;;  Make use-package do its thing
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+(require 'use-package)
+
+;; Make emacs install packages automatically
+(require 'use-package-ensure)
+(setq use-package-always-ensure t)
+
+
+
 ;; Autocomplete
-(ac-config-default)
-(global-auto-complete-mode t)
+(use-package auto-complete-config
+  :ensure auto-complete
+  :init
+  (ac-config-default)
+  (global-auto-complete-mode t)
+)
 
 
-;; Open shells in the currently activated window
-(add-to-list 'display-buffer-alist
-             `(,(regexp-quote "*shell") display-buffer-same-window))
 
 ;; which-key
-(setq whick-key-idle-delay 0.05) ; time between pressing a key and bringing up display
-(require 'which-key)
-(which-key-mode)
+(use-package which-key
+  :init
+  (setq whick-key-idle-delay 0.05) ; time between pressing a key and bringing up display
+  :config
+  (which-key-mode)
+)
+
 
 ;; spacemacs theme
-(load-theme 'spacemacs-dark)
-
+(use-package spacemacs-theme
+  :defer t
+  :init (load-theme 'spacemacs-dark t)
+)
 
 ;; evil
-(setq evil-want-C-u-scroll t)
-(require 'evil)
-(evil-mode t)
+(use-package evil
+  :init
+  (setq evil-want-C-u-scroll t)
+  :config
+  (evil-mode t)
+)
 
 
 ;; helm
-(require 'helm-config)
-(helm-mode 1)
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
+(use-package helm
+  :bind ("M-x" . helm-M-x)
+  :config
+  (global-set-key (kbd "C-x C-f") 'helm-find-files)
+  (helm-mode 1)
+)
+
 
 
 ;; dashboard
-(require 'dashboard)
-(setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
-;;
-(dashboard-setup-startup-hook)
-;; For use-package...
-;;(use-package dashboard
-;;             :ensure t
-;;             :config
-;;             (dashboard-setup-startup-hook))
+(use-package dashboard
+  :init
+  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+  :config
+  (dashboard-setup-startup-hook)
+)
 
 
 ;; nicer org bullet points
-(require 'org-bullets)
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+(use-package org-bullets
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+)
+
+
+
+;; blacken, to nicely format python code
+(use-package blacken)
+(use-package python-black
+  :demand t
+  :after python
+)
 
 
 ;; elpy (python ide stuff)
-(elpy-enable)
-
-
-;; Automatically run Black on buffer save
-; M-x package-install blacken
-(add-hook 'elpy-mode-hook
+(use-package elpy
+  :config
+  (elpy-enable)
+  ;; Automatically run Black on buffer save
+  (add-hook 'elpy-mode-hook
           '(lambda ()
              (when (eq major-mode 'python-mode)
                (add-hook 'before-save-hook 'elpy-black-fix-code))))
+)
+
+
 
 
 ;; flycheck (on-the-fly syntax checking)
-(when (require 'flycheck nil t)
+(use-package flycheck
+  :config
+  (when (require 'flycheck nil t)
   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
   (add-hook 'elpy-mode-hook 'flycheck-mode))
+  :after elpy
+)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -127,10 +167,14 @@
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
 
-;; TODOs
+;; Org mode TODO types
 (setq org-todo-keywords
       '((sequence "TODO(t)" "|" "DONE(d)")
         (sequence "PENDING(p)" "|" "CLAIMED")
         (sequence "WRITE(W)" "WRITING(w)" "REWRITE(R)" "|" "COMPLETED(c)"))
 )
 
+
+;; Open shells in the currently activated window
+(add-to-list 'display-buffer-alist
+             `(,(regexp-quote "*shell") display-buffer-same-window))
