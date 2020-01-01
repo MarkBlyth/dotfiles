@@ -86,12 +86,14 @@
 
 ;; helm
 (use-package helm
-  :bind ("M-x" . helm-M-x)
-  :config
-  (global-set-key (kbd "C-x C-f") 'helm-find-files)
-  (helm-mode 1)
+  :bind (("M-a" . helm-M-x)
+         ("C-x C-f" . helm-find-files)
+         ("C-x f" . helm-recentf)
+         ("C-x b" . helm-buffers-list))
+  :config (progn
+	    (setq helm-buffers-fuzzy-matching t)
+            (helm-mode 1))
 )
-
 
 
 ;; dashboard
