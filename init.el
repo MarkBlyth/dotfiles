@@ -29,7 +29,7 @@
  '(org-export-backends (quote (ascii beamer html icalendar latex md odt org)))
  '(package-selected-packages
    (quote
-    (flycheck blacken elpy python-black auto-complete pdf-tools org-bullets dashboard evil-visual-mark-mode spacemacs-theme which-key org-agenda-property))))
+    (evil-magit magit flycheck blacken elpy python-black auto-complete pdf-tools org-bullets dashboard evil-visual-mark-mode spacemacs-theme which-key org-agenda-property))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -143,6 +143,13 @@
   (add-hook 'elpy-mode-hook 'flycheck-mode))
   :after elpy
 )
+
+
+;; magit (git interface)
+(use-package magit)
+
+;; make evil keybindings work with magit
+(use-package evil-magit)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;
