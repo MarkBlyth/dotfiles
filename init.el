@@ -86,7 +86,7 @@
 
 ;; helm
 (use-package helm
-  :bind (("M-a" . helm-M-x)
+  :bind (("M-x" . helm-M-x)
          ("C-x C-f" . helm-find-files)
          ("C-x f" . helm-recentf)
          ("C-x b" . helm-buffers-list))
