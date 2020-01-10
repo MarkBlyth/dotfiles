@@ -175,10 +175,6 @@
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
-(define-key org-mode-map (kbd "C-c t") 'org-toggle-latex-fragment)
-(define-key org-mode-map (kbd "C-c i") 'org-toggle-inline-images)
-(define-key org-mode-map (kbd "C-c p") 'org-set-property)
-
 
 ;; Org mode TODO types
 (setq org-todo-keywords
