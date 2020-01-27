@@ -213,3 +213,8 @@
 ;; Open shells in the currently activated window
 (add-to-list 'display-buffer-alist
              `(,(regexp-quote "*shell") display-buffer-same-window))
+
+;; Always scroll to the bottom of python shells
+(add-hook 'inferior-python-mode-hook
+          (lambda ()
+            (setq comint-move-point-for-output t)))
