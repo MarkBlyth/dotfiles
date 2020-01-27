@@ -22,6 +22,7 @@
  ;; If there is more than one, they won't work right.
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
+ '(company-auto-complete nil)
  '(custom-enabled-themes (quote (doom-molokai)))
  '(custom-safe-themes
    (quote
