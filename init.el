@@ -90,13 +90,6 @@
 )
 
 
-;; spacemacs theme
-;;(use-package spacemacs-theme
-;;  :defer t
-;;  :init (load-theme 'spacemacs-dark t)
-;;)
-
-
 ;; doom themes
 (use-package doom-themes
   :defer t
