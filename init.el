@@ -143,13 +143,13 @@
 
 ;; elpy (python ide stuff)
 (use-package elpy
-  :config
+  :init
   (elpy-enable)
   ;; Automatically run Black on buffer save
-  (add-hook 'elpy-mode-hook
-          '(lambda ()
-             (when (eq major-mode 'python-mode)
-               (add-hook 'before-save-hook 'elpy-black-fix-code))))
+;;  (add-hook 'elpy-mode-hook
+;;          '(lambda ()
+;;             (when (eq major-mode 'python-mode)
+;;               (add-hook 'before-save-hook 'elpy-black-fix-code))))
 )
 
 
