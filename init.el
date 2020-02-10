@@ -50,7 +50,7 @@
  '(org-export-backends (quote (ascii beamer html icalendar latex md odt org)))
  '(package-selected-packages
    (quote
-    (doom-themes evil-magit magit flycheck blacken elpy python-black auto-complete pdf-tools org-bullets dashboard evil-visual-mark-mode spacemacs-theme which-key org-agenda-property))))
+    (general elpy doom-themes evil-magit magit flycheck blacken python-black auto-complete pdf-tools org-bullets dashboard evil-visual-mark-mode spacemacs-theme which-key org-agenda-property))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -170,6 +170,21 @@
 
 ;; make evil keybindings work with magit
 (use-package evil-magit)
+
+
+;; Nice key binds
+(use-package general)
+(general-evil-define-key 'normal 'global
+ :prefix "SPC"
+ "" nil
+ "r" 'helm-recentf
+ "f" 'helm-find-files
+ "b" 'helm-buffers-list
+ "g" 'magit
+ "3" 'split-window-right
+ "0" 'delete-window
+) 
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;
