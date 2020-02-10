@@ -187,16 +187,23 @@
 (general-evil-define-key 'normal 'global
  :prefix "SPC"
  "" nil
+ ;; files
  "r" 'helm-recentf
  "f" 'helm-find-files
+ ;; windows
  "b" 'helm-buffers-list
- "g" 'magit
+ "3" 'split-window-right
+ "0" 'delete-window
+ ;; TODOs
  "p" 'hl-todo-previous
  "n" 'hl-todo-next
  "o" 'hl-todo-occur
  "i" 'hl-todo-insert
- "3" 'split-window-right
- "0" 'delete-window
+ ;; org specific
+ "l" 'org-toggle-latex-fragment
+ "P" 'org-set-property
+ ;; others
+ "g" 'magit
 ) 
 
 ;;;;;;;;;;;;;;;;;;;;;;
