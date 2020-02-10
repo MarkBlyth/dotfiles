@@ -70,6 +70,10 @@
 (setq use-package-always-ensure t)
 
 
+;; Use octave-mode for all .m files
+(setq auto-mode-alist
+      (cons '("\\.m$" . octave-mode) auto-mode-alist))
+
 
 ;; Autocomplete
 (use-package auto-complete-config
