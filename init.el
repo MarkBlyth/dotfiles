@@ -50,7 +50,7 @@
  '(org-export-backends (quote (ascii beamer html icalendar latex md odt org)))
  '(package-selected-packages
    (quote
-    (general elpy doom-themes evil-magit magit flycheck blacken python-black auto-complete pdf-tools org-bullets dashboard evil-visual-mark-mode spacemacs-theme which-key org-agenda-property))))
+    (hl-todo general elpy doom-themes evil-magit magit flycheck blacken python-black auto-complete pdf-tools org-bullets dashboard evil-visual-mark-mode spacemacs-theme which-key org-agenda-property))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -176,6 +176,12 @@
 (use-package evil-magit)
 
 
+;; Highlight TODOs
+(use-package hl-todo
+  :config
+  (global-hl-todo-mode)
+)
+
 ;; Nice key binds
 (use-package general)
 (general-evil-define-key 'normal 'global
@@ -185,11 +191,13 @@
  "f" 'helm-find-files
  "b" 'helm-buffers-list
  "g" 'magit
+ "p" 'hl-todo-previous
+ "n" 'hl-todo-next
+ "o" 'hl-todo-occur
+ "i" 'hl-todo-insert
  "3" 'split-window-right
  "0" 'delete-window
 ) 
-
-
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; Config
