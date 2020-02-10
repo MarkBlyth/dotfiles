@@ -217,11 +217,18 @@
 (toggle-scroll-bar -1)
 (menu-bar-mode -1)
 (global-linum-mode t)
+(global-visual-line-mode t)
 
 ;; org hotkeys
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
+
+
+;; Fix RET doing weird stuff sometimes
+(let ((x (key-binding "\C-j")))
+  (local-set-key "\C-m" x))
+
 
 ;; Org mode TODO types
 (setq org-todo-keywords
