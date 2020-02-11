@@ -199,15 +199,20 @@
  "n" 'hl-todo-next
  "o" 'hl-todo-occur
  "i" 'hl-todo-insert
- ;; org specific
- "l" 'org-toggle-latex-fragment
- "P" 'org-set-property
- "ep" 'org-latex-export-to-pdf
- "eb" 'org-beamer-export-to-latex
- "t" 'org-todo
  ;; others
  "g" 'magit
+ "o" 'other-window
 ) 
+(general-evil-define-key 'normal 'global
+    :keymaps 'org-mode-map
+    :prefix "SPC"
+    ;; org specific
+    "op" 'org-latex-export-to-pdf
+    "ob" 'org-beamer-export-to-latex
+    "ol" 'org-toggle-latex-fragment
+    "op" 'org-set-property
+    "ot" 'org-todo
+)
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; Config
