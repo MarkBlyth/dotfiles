@@ -202,6 +202,9 @@
  ;; org specific
  "l" 'org-toggle-latex-fragment
  "P" 'org-set-property
+ "ep" 'org-latex-export-to-pdf
+ "eb" 'org-beamer-export-to-latex
+ "t" 'org-todo
  ;; others
  "g" 'magit
 ) 
