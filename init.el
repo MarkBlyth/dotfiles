@@ -195,10 +195,10 @@
  "3" 'split-window-right
  "0" 'delete-window
  ;; TODOs
- "p" 'hl-todo-previous
- "n" 'hl-todo-next
- "o" 'hl-todo-occur
- "i" 'hl-todo-insert
+ "tp" 'hl-todo-previous
+ "tn" 'hl-todo-next
+ "to" 'hl-todo-occur
+ "ti" 'hl-todo-insert
  ;; others
  "g" 'magit
  "o" 'other-window
