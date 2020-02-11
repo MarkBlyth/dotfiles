@@ -213,6 +213,13 @@
     "op" 'org-set-property
     "ot" 'org-todo
 )
+(general-evil-define-key 'normal 'global
+  :keymaps 'python-mode-map
+  :prefix "SPC"
+  "pb" 'elpy-black-fix-code
+  "pr" 'elpy-send-shell-region-or-buffer
+  "pc" 'elpy-check 
+)
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; Config
