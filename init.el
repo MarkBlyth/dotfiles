@@ -217,7 +217,6 @@
   :keymaps 'python-mode-map
   :prefix "SPC"
   "pb" 'elpy-black-fix-code
-  "pr" 'elpy-send-shell-region-or-buffer
   "pc" 'elpy-check 
 )
 
@@ -250,6 +249,16 @@
 ;; Fix RET doing weird stuff sometimes
 (let ((x (key-binding "\C-j")))
   (local-set-key "\C-m" x))
+
+;; Remap c-u to c-f, and set c-u as evil scroll
+(define-key global-map (kbd "C-f") 'universal-argument)
+(define-key universal-argument-map (kbd "C-u") nil)
+(define-key universal-argument-map (kbd "C-f") 'universal-argument-more)
+(define-key global-map (kbd "C-u") 'kill-whole-line)
+(eval-after-load 'evil-maps
+  '(progn
+     (define-key evil-motion-state-map (kbd "C-f") nil)
+     (define-key evil-motion-state-map (kbd "C-u") 'evil-scroll-up)))
 
 
 ;; Org mode TODO types
