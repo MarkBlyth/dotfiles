@@ -209,7 +209,7 @@
     :keymaps 'org-mode-map
     :prefix "SPC"
     ;; org specific
-    "ap" 'org-latex-export-to-pdf
+    "ae" 'org-latex-export-to-pdf
     "ab" 'org-beamer-export-to-latex
     "al" 'org-toggle-latex-fragment
     "ap" 'org-set-property
