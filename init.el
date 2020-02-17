@@ -52,7 +52,7 @@
  '(org-export-backends (quote (ascii beamer html icalendar latex md odt org)))
  '(package-selected-packages
    (quote
-    (hl-todo general elpy doom-themes evil-magit magit flycheck blacken python-black auto-complete pdf-tools org-bullets dashboard evil-visual-mark-mode spacemacs-theme which-key org-agenda-property))))
+    (helm-bibtex org-ref hl-todo general elpy doom-themes evil-magit magit flycheck blacken python-black auto-complete pdf-tools org-bullets dashboard evil-visual-mark-mode spacemacs-theme which-key org-agenda-property))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -184,6 +184,21 @@
   (global-hl-todo-mode)
 )
 
+
+;; Use org-ref as a bibliography manager
+(use-package org-ref
+    :config
+    (setq org-ref-default-bibliography '("~/OrgFiles/refs/references.bib"))
+)
+;; Use helm-bibtex to find refs
+(use-package helm-bibtex
+  :config
+    (setq org-latex-pdf-process (quote ("texi2dvi -p -b -V %f")))
+;;    (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
+    (setq bibtex-completion-bibliography "~/OrgFiles/refs/references.bib")
+    (setq reftex-default-bibliography '("~/OrgFiles/refs/references.bib"))
+)
+
 ;; Nice key binds
 (use-package general)
 (general-evil-define-key 'normal 'global
@@ -214,6 +229,7 @@
     "al" 'org-toggle-latex-fragment
     "ap" 'org-set-property
     "at" 'org-todo
+    "ac" 'helm-bibtex
 )
 (general-evil-define-key 'normal 'global
   :keymaps 'python-mode-map
