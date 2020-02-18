@@ -50,6 +50,97 @@
    (quote
     ("~/OrgFiles/phd.org" "~/OrgFiles/personal.org" "~/OrgFiles/food.org")))
  '(org-export-backends (quote (ascii beamer html icalendar latex md odt org)))
+ '(org-latex-classes
+   (quote
+    (("beamer" "\\documentclass[presentation]{beamer}
+[DEFAULT-PACKAGES]
+[PACKAGES]
+\\newenvironment{NOTE}{\\color{red}\\bfseries ZZZ}
+\n
+[EXTRA]
+"
+      ("\\section{%s}" . "\\section*{%s}")
+      ("\\subsection{%s}" . "\\subsection*{%s}")
+      ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+     ("article" "\\documentclass[11pt]{article}
+[DEFAULT-PACKAGES]
+[PACKAGES]
+\\newenvironment{NOTE}{\\color{red}\\bfseries ZZZ}
+\n
+[EXTRA]
+"
+      ("\\section{%s}" . "\\section*{%s}")
+      ("\\subsection{%s}" . "\\subsection*{%s}")
+      ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+      ("\\paragraph{%s}" . "\\paragraph*{%s}")
+      ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+     ("report" "\\documentclass[11pt]{report}
+[DEFAULT-PACKAGES]
+[PACKAGES]
+\\newenvironment{NOTE}{\\color{red}\\bfseries ZZZ}
+\n
+[EXTRA]
+"
+      ("\\part{%s}" . "\\part*{%s}")
+      ("\\chapter{%s}" . "\\chapter*{%s}")
+      ("\\section{%s}" . "\\section*{%s}")
+      ("\\subsection{%s}" . "\\subsection*{%s}")
+      ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+     ("book" "\\documentclass[11pt]{book}
+[DEFAULT-PACKAGES]
+[PACKAGES]
+\\newenvironment{NOTE}{\\color{red}\\bfseries ZZZ}
+\n
+[EXTRA]
+"
+      ("\\part{%s}" . "\\part*{%s}")
+      ("\\chapter{%s}" . "\\chapter*{%s}")
+      ("\\section{%s}" . "\\section*{%s}")
+      ("\\subsection{%s}" . "\\subsection*{%s}")
+      ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))))
+ '(org-latex-packages-alist
+   (quote
+    (("usenames,dvipsnames,svgnames,table" "xcolor" nil))))
+ '(org-structure-template-alist
+   (quote
+    (("s" "#+BEGIN_SRC ?
+
+#+END_SRC")
+     ("e" "#+BEGIN_EXAMPLE
+?
+#+END_EXAMPLE")
+     ("q" "#+BEGIN_QUOTE
+?
+#+END_QUOTE")
+     ("v" "#+BEGIN_VERSE
+?
+#+END_VERSE")
+     ("V" "#+BEGIN_VERBATIM
+?
+#+END_VERBATIM")
+     ("c" "#+BEGIN_CENTER
+?
+#+END_CENTER")
+     ("C" "#+BEGIN_COMMENT
+?
+#+END_COMMENT")
+     ("l" "#+BEGIN_EXPORT latex
+?
+#+END_EXPORT")
+     ("L" "#+LaTeX: ")
+     ("h" "#+BEGIN_EXPORT html
+?
+#+END_EXPORT")
+     ("H" "#+HTML: ")
+     ("a" "#+BEGIN_EXPORT ascii
+?
+#+END_EXPORT")
+     ("A" "#+ASCII: ")
+     ("i" "#+INDEX: ?")
+     ("I" "#+INCLUDE: %file ?")
+     ("n" "#+BEGIN_NOTE 
+? 
+#+END_NOTE"))))
  '(package-selected-packages
    (quote
     (helm-bibtex org-ref hl-todo general elpy doom-themes evil-magit magit flycheck blacken python-black auto-complete pdf-tools org-bullets dashboard evil-visual-mark-mode spacemacs-theme which-key org-agenda-property))))
@@ -181,7 +272,7 @@
 ;; Highlight TODOs
 (use-package hl-todo
   :config
-  (global-hl-todo-mode)
+  (global-hl-todo-mode t)
 )
 
 
