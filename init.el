@@ -284,8 +284,8 @@
 ;; Use helm-bibtex to find refs
 (use-package helm-bibtex
   :config
-    (setq org-latex-pdf-process (quote ("texi2dvi -p -b -V %f")))
-;;    (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
+;;    (setq org-latex-pdf-process (quote ("texi2dvi -p -b -V %f")))
+    (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
     (setq bibtex-completion-bibliography "~/OrgFiles/refs/references.bib")
     (setq reftex-default-bibliography '("~/OrgFiles/refs/references.bib"))
 )
