@@ -32,7 +32,7 @@
  '(hl-todo-keyword-faces
    (quote
     (("TODO" . "#f2241f")
-     ("NEXT" . "#dc752f")
+     ("NEXT" . "#4f97d7")
 ;;     ("THEM" . "#2d9574")
 ;;     ("PROG" . "#4f97d7")
      ("OKAY" . "#4f97d7")
