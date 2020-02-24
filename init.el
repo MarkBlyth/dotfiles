@@ -55,8 +55,6 @@
     (("beamer" "\\documentclass[presentation]{beamer}
 [DEFAULT-PACKAGES]
 [PACKAGES]
-\\newenvironment{NOTE}{\\color{red}\\bfseries ZZZ}
-\n
 [EXTRA]
 "
       ("\\section{%s}" . "\\section*{%s}")
@@ -65,6 +63,7 @@
      ("article" "\\documentclass[11pt]{article}
 [DEFAULT-PACKAGES]
 [PACKAGES]
+\\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \\newenvironment{NOTE}{\\color{red}\\bfseries ZZZ}
 \n
 [EXTRA]
@@ -77,6 +76,7 @@
      ("report" "\\documentclass[11pt]{report}
 [DEFAULT-PACKAGES]
 [PACKAGES]
+\\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \\newenvironment{NOTE}{\\color{red}\\bfseries ZZZ}
 \n
 [EXTRA]
@@ -89,6 +89,7 @@
      ("book" "\\documentclass[11pt]{book}
 [DEFAULT-PACKAGES]
 [PACKAGES]
+\\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \\newenvironment{NOTE}{\\color{red}\\bfseries ZZZ}
 \n
 [EXTRA]
@@ -98,9 +99,6 @@
       ("\\section{%s}" . "\\section*{%s}")
       ("\\subsection{%s}" . "\\subsection*{%s}")
       ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))))
- '(org-latex-packages-alist
-   (quote
-    (("usenames,dvipsnames,svgnames,table" "xcolor" nil))))
  '(org-structure-template-alist
    (quote
     (("s" "#+BEGIN_SRC ?
