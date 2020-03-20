@@ -53,11 +53,11 @@
       ("\\subsection{%s}" . "\\subsection*{%s}")
       ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
      ("article" "\\documentclass[11pt]{article}
-[DEFAULT-PACKAGES]
-[PACKAGES]
 \\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \\newenvironment{NOTE}{\\color{red}\\bfseries ZZZ}
 \n
+[DEFAULT-PACKAGES]
+[PACKAGES]
 [EXTRA]
 "
       ("\\section{%s}" . "\\section*{%s}")
@@ -66,11 +66,11 @@
       ("\\paragraph{%s}" . "\\paragraph*{%s}")
       ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
      ("report" "\\documentclass[11pt]{report}
-[DEFAULT-PACKAGES]
-[PACKAGES]
 \\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \\newenvironment{NOTE}{\\color{red}\\bfseries ZZZ}
 \n
+[DEFAULT-PACKAGES]
+[PACKAGES]
 [EXTRA]
 "
       ("\\part{%s}" . "\\part*{%s}")
@@ -80,10 +80,10 @@
       ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
      ("book" "\\documentclass[11pt]{book}
 [DEFAULT-PACKAGES]
-[PACKAGES]
 \\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \\newenvironment{NOTE}{\\color{red}\\bfseries ZZZ}
 \n
+[PACKAGES]
 [EXTRA]
 "
       ("\\part{%s}" . "\\part*{%s}")
