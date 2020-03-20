@@ -317,7 +317,9 @@
   :prefix "SPC"
   "pb" 'elpy-black-fix-code
   "pc" 'elpy-check 
+  "pf" 'elpy-folding-toggle-at-point
 )
+
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; Config
