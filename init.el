@@ -33,18 +33,10 @@
    (quote
     (("TODO" . "#f2241f")
      ("NEXT" . "#4f97d7")
-;;     ("THEM" . "#2d9574")
-;;     ("PROG" . "#4f97d7")
-     ("OKAY" . "#4f97d7")
-;;     ("DONT" . "#f2241f")
-;;     ("FAIL" . "#f2241f")
+     ("FINISH" . "#4f97d7")
      ("DONE" . "#86dc2f")
-;;     ("NOTE" . "#b1951d")
-;;     ("KLUDGE" . "#b1951d")
-;;     ("HACK" . "#b1951d")
+     ("OKAY" . "#86dc2f")
      ("TEMP" . "#b1951d")
-;;     ("\\?\\?\\?+" . "#dc752f")
-;;     ("XXX+" . "#dc752f")
      ("FIX" . "#dc752f"))))
  '(org-agenda-files
    (quote
