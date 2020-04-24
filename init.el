@@ -55,7 +55,8 @@
      ("article" "\\documentclass[11pt]{article}
 \\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \\newenvironment{NOTE}{\\color{red}\\bfseries ZZZ}
-\n
+
+
 [DEFAULT-PACKAGES]
 [PACKAGES]
 [EXTRA]
@@ -68,7 +69,8 @@
      ("report" "\\documentclass[11pt]{report}
 \\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \\newenvironment{NOTE}{\\color{red}\\bfseries ZZZ}
-\n
+
+
 [DEFAULT-PACKAGES]
 [PACKAGES]
 [EXTRA]
@@ -82,7 +84,8 @@
 [DEFAULT-PACKAGES]
 \\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \\newenvironment{NOTE}{\\color{red}\\bfseries ZZZ}
-\n
+
+
 [PACKAGES]
 [EXTRA]
 "
