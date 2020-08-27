@@ -90,8 +90,7 @@
       ("\\subsection{%s}" . "\\subsection*{%s}")
       ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
  '(org-structure-template-alist
-   '(("a" . "export ascii")
-     ("c" . "center")
+   '(("c" . "center")
      ("C" . "comment")
      ("e" . "example")
      ("E" . "export")
@@ -99,8 +98,9 @@
      ("l" . "export latex")
      ("q" . "quote")
      ("s" . "src")
-     ("" . "")
-     ("n" . "note")))
+     ("n" . "note")
+     ("a" . "abstract")
+     ("" . "")))
  '(package-selected-packages
    '(helm-projectile projectile markdown-mode helm-bibtex org-ref hl-todo general elpy doom-themes evil-magit magit flycheck blacken python-black auto-complete pdf-tools org-bullets dashboard evil-visual-mark-mode spacemacs-theme which-key org-agenda-property)))
 (custom-set-faces
