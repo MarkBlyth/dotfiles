@@ -122,6 +122,10 @@
 (setq use-package-always-ensure t)
 
 
+;; Fast insertion of structure templates
+(require 'org-tempo)
+
+
 ;; Use octave-mode for all .m files
 (setq auto-mode-alist
       (cons '("\\.m$" . octave-mode) auto-mode-alist))
