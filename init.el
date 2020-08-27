@@ -23,28 +23,23 @@
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
  '(company-auto-complete nil)
- '(custom-enabled-themes (quote (doom-molokai)))
+ '(custom-enabled-themes '(doom-molokai))
  '(custom-safe-themes
-   (quote
-    ("be9645aaa8c11f76a10bcf36aaf83f54f4587ced1b9b679b55639c87404e2499" "774aa2e67af37a26625f8b8c86f4557edb0bac5426ae061991a7a1a4b1c7e375" "e1ef2d5b8091f4953fe17b4ca3dd143d476c106e221d92ded38614266cea3c8b" "229c5cf9c9bd4012be621d271320036c69a14758f70e60385e87880b46d60780" "7f791f743870983b9bb90c8285e1e0ba1bf1ea6e9c9a02c60335899ba20f3c94" "7b50dc95a32cadd584bda3f40577e135c392cd7fb286a468ba4236787d295f4b" "c520bbbddca1d7362d046635c5cc023b5f151b250ac9f8d6ce763afa804b7d1d" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
+   '("be9645aaa8c11f76a10bcf36aaf83f54f4587ced1b9b679b55639c87404e2499" "774aa2e67af37a26625f8b8c86f4557edb0bac5426ae061991a7a1a4b1c7e375" "e1ef2d5b8091f4953fe17b4ca3dd143d476c106e221d92ded38614266cea3c8b" "229c5cf9c9bd4012be621d271320036c69a14758f70e60385e87880b46d60780" "7f791f743870983b9bb90c8285e1e0ba1bf1ea6e9c9a02c60335899ba20f3c94" "7b50dc95a32cadd584bda3f40577e135c392cd7fb286a468ba4236787d295f4b" "c520bbbddca1d7362d046635c5cc023b5f151b250ac9f8d6ce763afa804b7d1d" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
  '(elpy-shell-echo-input nil)
  '(elpy-shell-echo-output t)
  '(hl-todo-keyword-faces
-   (quote
-    (("TODO" . "#f2241f")
+   '(("TODO" . "#f2241f")
      ("NEXT" . "#4f97d7")
      ("FINISH" . "#4f97d7")
      ("DONE" . "#86dc2f")
      ("OKAY" . "#86dc2f")
      ("TEMP" . "#b1951d")
-     ("FIX" . "#dc752f"))))
- '(org-agenda-files
-   (quote
-    ("~/OrgFiles/phd.org" "~/OrgFiles/personal.org" "~/OrgFiles/food.org")))
- '(org-export-backends (quote (ascii beamer html icalendar latex md odt org)))
+     ("FIX" . "#dc752f")))
+ '(org-agenda-files nil)
+ '(org-export-backends '(ascii beamer html icalendar latex md odt org))
  '(org-latex-classes
-   (quote
-    (("beamer" "\\documentclass[presentation]{beamer}
+   '(("beamer" "\\documentclass[presentation]{beamer}
 [DEFAULT-PACKAGES]
 [PACKAGES]
 [EXTRA]
@@ -93,50 +88,21 @@
       ("\\chapter{%s}" . "\\chapter*{%s}")
       ("\\section{%s}" . "\\section*{%s}")
       ("\\subsection{%s}" . "\\subsection*{%s}")
-      ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))))
+      ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
  '(org-structure-template-alist
-   (quote
-    (("s" "#+BEGIN_SRC ?
-
-#+END_SRC")
-     ("e" "#+BEGIN_EXAMPLE
-?
-#+END_EXAMPLE")
-     ("q" "#+BEGIN_QUOTE
-?
-#+END_QUOTE")
-     ("v" "#+BEGIN_VERSE
-?
-#+END_VERSE")
-     ("V" "#+BEGIN_VERBATIM
-?
-#+END_VERBATIM")
-     ("c" "#+BEGIN_CENTER
-?
-#+END_CENTER")
-     ("C" "#+BEGIN_COMMENT
-?
-#+END_COMMENT")
-     ("l" "#+BEGIN_EXPORT latex
-?
-#+END_EXPORT")
-     ("L" "#+LaTeX: ")
-     ("h" "#+BEGIN_EXPORT html
-?
-#+END_EXPORT")
-     ("H" "#+HTML: ")
-     ("a" "#+BEGIN_EXPORT ascii
-?
-#+END_EXPORT")
-     ("A" "#+ASCII: ")
-     ("i" "#+INDEX: ?")
-     ("I" "#+INCLUDE: %file ?")
-     ("n" "#+BEGIN_NOTE 
-? 
-#+END_NOTE"))))
+   '(("a" . "export ascii")
+     ("c" . "center")
+     ("C" . "comment")
+     ("e" . "example")
+     ("E" . "export")
+     ("h" . "export html")
+     ("l" . "export latex")
+     ("q" . "quote")
+     ("s" . "src")
+     ("" . "")
+     ("n" . "note")))
  '(package-selected-packages
-   (quote
-    (helm-bibtex org-ref hl-todo general elpy doom-themes evil-magit magit flycheck blacken python-black auto-complete pdf-tools org-bullets dashboard evil-visual-mark-mode spacemacs-theme which-key org-agenda-property))))
+   '(helm-projectile projectile markdown-mode helm-bibtex org-ref hl-todo general elpy doom-themes evil-magit magit flycheck blacken python-black auto-complete pdf-tools org-bullets dashboard evil-visual-mark-mode spacemacs-theme which-key org-agenda-property)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -272,16 +238,35 @@
 ;; Use org-ref as a bibliography manager
 (use-package org-ref
     :config
-    (setq org-ref-default-bibliography '("~/OrgFiles/refs/references.bib"))
+    (setq org-ref-default-bibliography '("~/PhD/OrgFiles/refs/references.bib"))
 )
 ;; Use helm-bibtex to find refs
 (use-package helm-bibtex
   :config
 ;;    (setq org-latex-pdf-process (quote ("texi2dvi -p -b -V %f")))
     (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
-    (setq bibtex-completion-bibliography "~/OrgFiles/refs/references.bib")
-    (setq reftex-default-bibliography '("~/OrgFiles/refs/references.bib"))
+    (setq bibtex-completion-bibliography "~/Files/PhD/OrgFiles/refs/references.bib")
+    (setq reftex-default-bibliography '("~/Files/PhD/OrgFiles/refs/references.bib"))
 )
+
+
+(use-package markdown-mode
+  :ensure t
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
+
+
+(use-package projectile
+  :ensure t)
+(use-package helm-projectile
+  :ensure t)
+(projectile-global-mode)
+(setq projectile-completion-system 'helm)
+(helm-projectile-on)
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
 ;; Nice key binds
 (use-package general)
@@ -322,14 +307,6 @@
   "pc" 'elpy-check 
   "pf" 'elpy-folding-toggle-at-point
 )
-
-(use-package markdown-mode
-  :ensure t
-  :commands (markdown-mode gfm-mode)
-  :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode))
-  :init (setq markdown-command "multimarkdown"))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;
