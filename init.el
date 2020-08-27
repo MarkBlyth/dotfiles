@@ -49,7 +49,7 @@
       ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
      ("article" "\\documentclass[11pt]{article}
 \\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
-\\newenvironment{NOTE}{\\color{red}\\bfseries ZZZ}
+\\newenvironment{note}{\\color{red}\\bfseries ZZZ}
 
 
 [DEFAULT-PACKAGES]
@@ -63,7 +63,7 @@
       ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
      ("report" "\\documentclass[11pt]{report}
 \\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
-\\newenvironment{NOTE}{\\color{red}\\bfseries ZZZ}
+\\newenvironment{note}{\\color{red}\\bfseries ZZZ}
 
 
 [DEFAULT-PACKAGES]
@@ -78,7 +78,7 @@
      ("book" "\\documentclass[11pt]{book}
 [DEFAULT-PACKAGES]
 \\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
-\\newenvironment{NOTE}{\\color{red}\\bfseries ZZZ}
+\\newenvironment{note}{\\color{red}\\bfseries ZZZ}
 
 
 [PACKAGES]
