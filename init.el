@@ -22,14 +22,14 @@
  ;; If there is more than one, they won't work right.
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
+ '(company-auto-commit nil)
  '(company-auto-complete nil)
  '(custom-enabled-themes '(doom-molokai))
  '(custom-safe-themes
    '("be9645aaa8c11f76a10bcf36aaf83f54f4587ced1b9b679b55639c87404e2499" "774aa2e67af37a26625f8b8c86f4557edb0bac5426ae061991a7a1a4b1c7e375" "e1ef2d5b8091f4953fe17b4ca3dd143d476c106e221d92ded38614266cea3c8b" "229c5cf9c9bd4012be621d271320036c69a14758f70e60385e87880b46d60780" "7f791f743870983b9bb90c8285e1e0ba1bf1ea6e9c9a02c60335899ba20f3c94" "7b50dc95a32cadd584bda3f40577e135c392cd7fb286a468ba4236787d295f4b" "c520bbbddca1d7362d046635c5cc023b5f151b250ac9f8d6ce763afa804b7d1d" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
- '(elpy-shell-echo-input nil)
- '(elpy-shell-echo-output t)
  '(hl-todo-keyword-faces
    '(("TODO" . "#f2241f")
+     ("CHECK" . "#f2241f")
      ("NEXT" . "#4f97d7")
      ("FINISH" . "#4f97d7")
      ("DONE" . "#86dc2f")
@@ -99,10 +99,12 @@
      ("q" . "quote")
      ("s" . "src")
      ("n" . "note")
+     ("d" . "definition")
+     ("t" . "theorem")
      ("a" . "abstract")
      ("" . "")))
  '(package-selected-packages
-   '(helm-projectile projectile markdown-mode helm-bibtex org-ref hl-todo general elpy doom-themes evil-magit magit flycheck blacken python-black auto-complete pdf-tools org-bullets dashboard evil-visual-mark-mode spacemacs-theme which-key org-agenda-property)))
+   '(company-tabnine use-package company-quickhelp company rainbow-delimiters markdown-mode helm-bibtex org-ref hl-todo general doom-themes evil-magit magit flycheck blacken python-black pdf-tools org-bullets dashboard evil-visual-mark-mode spacemacs-theme which-key org-agenda-property)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -126,19 +128,32 @@
 (require 'org-tempo)
 
 
+(use-package rainbow-delimiters
+  :config
+  (add-hook 'python-mode-hook #'rainbow-delimiters-mode)
+)
+
+
+(use-package company
+  :init
+  (setq company-idle-delay 0)
+  (setq company-show-numbers t)
+  :config
+  (add-hook 'python-mode-hook #'company-mode)
+)
+
+(use-package company-tabnine)
+(add-to-list 'company-backends #'company-tabnine)
+
+(use-package company-quickhelp
+  :ensure t
+  :config
+  (company-quickhelp-mode)
+)
+
 ;; Use octave-mode for all .m files
 (setq auto-mode-alist
       (cons '("\\.m$" . octave-mode) auto-mode-alist))
-
-
-;; Autocomplete
-(use-package auto-complete-config
-  :ensure auto-complete
-  :init
-  (ac-config-default)
-  (global-auto-complete-mode t)
-)
-
 
 
 ;; which-key
@@ -194,35 +209,19 @@
 
 
 ;; blacken, to nicely format python code
-(use-package blacken)
 (use-package python-black
   :demand t
   :after python
 )
 
 
-;; elpy (python ide stuff)
-(use-package elpy
-  :init
-  (elpy-enable)
-  ;; Automatically run Black on buffer save
-;;  (add-hook 'elpy-mode-hook
-;;          '(lambda ()
-;;             (when (eq major-mode 'python-mode)
-;;               (add-hook 'before-save-hook 'elpy-black-fix-code))))
-)
-
-
-
 
 ;; flycheck (on-the-fly syntax checking)
 (use-package flycheck
   :config
-  (when (require 'flycheck nil t)
-  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-  (add-hook 'elpy-mode-hook 'flycheck-mode))
-  :after elpy
+  :init (global-flycheck-mode)
 )
+(add-hook 'after-init-hook #'global-flycheck-mode)
 
 
 ;; magit (git interface)
@@ -255,7 +254,6 @@
 
 
 (use-package markdown-mode
-  :ensure t
   :commands (markdown-mode gfm-mode)
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
@@ -263,14 +261,6 @@
   :init (setq markdown-command "multimarkdown"))
 
 
-(use-package projectile
-  :ensure t)
-(use-package helm-projectile
-  :ensure t)
-(projectile-global-mode)
-(setq projectile-completion-system 'helm)
-(helm-projectile-on)
-(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
 ;; Nice key binds
 (use-package general)
@@ -292,7 +282,8 @@
  ;; others
  "g" 'magit
  "o" 'other-window
-) 
+)
+
 (general-evil-define-key 'normal 'global
     :keymaps 'org-mode-map
     :prefix "SPC"
@@ -307,9 +298,7 @@
 (general-evil-define-key 'normal 'global
   :keymaps 'python-mode-map
   :prefix "SPC"
-  "pb" 'elpy-black-fix-code
-  "pc" 'elpy-check 
-  "pf" 'elpy-folding-toggle-at-point
+  "pb" 'python-black-buffer
 )
 
 
