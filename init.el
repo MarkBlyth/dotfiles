@@ -24,9 +24,10 @@
    [default default default italic underline success warning error])
  '(company-auto-commit nil)
  '(company-auto-complete nil)
+ '(company-insertion-on-trigger nil)
  '(custom-enabled-themes '(doom-molokai))
  '(custom-safe-themes
-   '("be9645aaa8c11f76a10bcf36aaf83f54f4587ced1b9b679b55639c87404e2499" "774aa2e67af37a26625f8b8c86f4557edb0bac5426ae061991a7a1a4b1c7e375" "e1ef2d5b8091f4953fe17b4ca3dd143d476c106e221d92ded38614266cea3c8b" "229c5cf9c9bd4012be621d271320036c69a14758f70e60385e87880b46d60780" "7f791f743870983b9bb90c8285e1e0ba1bf1ea6e9c9a02c60335899ba20f3c94" "7b50dc95a32cadd584bda3f40577e135c392cd7fb286a468ba4236787d295f4b" "c520bbbddca1d7362d046635c5cc023b5f151b250ac9f8d6ce763afa804b7d1d" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
+   '("0466adb5554ea3055d0353d363832446cd8be7b799c39839f387abb631ea0995" "be9645aaa8c11f76a10bcf36aaf83f54f4587ced1b9b679b55639c87404e2499" "774aa2e67af37a26625f8b8c86f4557edb0bac5426ae061991a7a1a4b1c7e375" "e1ef2d5b8091f4953fe17b4ca3dd143d476c106e221d92ded38614266cea3c8b" "229c5cf9c9bd4012be621d271320036c69a14758f70e60385e87880b46d60780" "7f791f743870983b9bb90c8285e1e0ba1bf1ea6e9c9a02c60335899ba20f3c94" "7b50dc95a32cadd584bda3f40577e135c392cd7fb286a468ba4236787d295f4b" "c520bbbddca1d7362d046635c5cc023b5f151b250ac9f8d6ce763afa804b7d1d" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
  '(hl-todo-keyword-faces
    '(("TODO" . "#f2241f")
      ("CHECK" . "#f2241f")
@@ -50,6 +51,20 @@
      ("article" "\\documentclass[11pt]{article}
 \\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \\newenvironment{note}{\\color{red}\\bfseries ZZZ}
+
+
+[DEFAULT-PACKAGES]
+[PACKAGES]
+[EXTRA]
+"
+      ("\\section{%s}" . "\\section*{%s}")
+      ("\\subsection{%s}" . "\\subsection*{%s}")
+      ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+      ("\\paragraph{%s}" . "\\paragraph*{%s}")
+      ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+     ("springer" "\\documentclass{svjour3}
+\\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\\renewenvironment{note}{\\color{red}\\bfseries ZZZ}
 
 
 [DEFAULT-PACKAGES]
@@ -112,7 +127,6 @@
  ;; If there is more than one, they won't work right.
  )
 
-
 ;;  Make use-package do its thing
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -170,10 +184,22 @@
   :defer t
 )
 
+
+;; undo-tree; gets undo and redo to work in evil
+(use-package undo-tree
+  :ensure t
+  :after evil
+  :diminish
+  :config
+  (evil-set-undo-system 'undo-tree)
+  (global-undo-tree-mode 1))
+
 ;; evil
 (use-package evil
   :init
   (setq evil-want-C-u-scroll t)
+  (setq evil-want-C-i-jump nil)
+  (evil-define-key 'normal evil-jumper-mode-map (kbd "TAB") nil)
   :config
   (evil-mode t)
 )
@@ -218,10 +244,21 @@
 
 ;; flycheck (on-the-fly syntax checking)
 (use-package flycheck
-  :config
   :init (global-flycheck-mode)
+  :config
+;;  (setq flycheck-global-modes '(not org-mode))
+  (add-hook 'after-init-hook #'global-flycheck-mode)
 )
-(add-hook 'after-init-hook #'global-flycheck-mode)
+
+(flycheck-define-checker proselint
+  "A linter for prose."
+  :command ("proselint" source-inplace)
+  :error-patterns
+  ((warning line-start (file-name) ":" line ":" column ": "
+        (id (one-or-more (not (any " "))))
+        (message) line-end))
+  :modes (text-mode markdown-mode gfm-mode org-mode))
+(add-to-list 'flycheck-checkers 'proselint)
 
 
 ;; magit (git interface)
@@ -282,6 +319,8 @@
  ;; others
  "g" 'magit
  "o" 'other-window
+ "c" 'flycheck-list-errors
+ "s" 'flyspell-auto-correct-word
 )
 
 (general-evil-define-key 'normal 'global
@@ -306,7 +345,58 @@
 ;; Config
 ;;;;;;;;;;;;;;;;;;;;;;
 
+(defun unfill-region (beg end)
+  "Unfill the region, joining text paragraphs into a single
+    logical line.  This is useful, e.g., for use with
+    `visual-line-mode'."
+  (interactive "*r")
+  (let ((fill-column (point-max)))
+    (fill-region beg end)))
+
+;; Handy key definition
+(define-key global-map "\C-\M-Q" 'unfill-region)
+
+
 ;; Misc
+
+ (defun flyspell-on-for-buffer-type ()
+      "Enable Flyspell appropriately for the major mode of the current
+buffer. Uses `flyspell-prog-mode' for modes derived from `prog-mode',
+so only strings and comments get checked. All other buffers get
+`flyspell-mode' to check all text. If flyspell is already enabled,
+does nothing."
+      (interactive)
+      (if (not (symbol-value flyspell-mode)) ; if not already on
+	(progn
+	  (if (derived-mode-p 'prog-mode)
+	    (progn
+	      (message "Flyspell on (code)")
+	      (flyspell-prog-mode))
+	    ;; else
+	    (progn
+	      (message "Flyspell on (text)")
+	      (flyspell-mode 1)))
+	  ;; I tried putting (flyspell-buffer) here but it didn't seem to work
+	  )))
+    
+    (defun flyspell-toggle ()
+      "Turn Flyspell on if it is off, or off if it is on. When turning
+on, it uses `flyspell-on-for-buffer-type' so code-vs-text is handled
+appropriately."
+      (interactive)
+      (if (symbol-value flyspell-mode)
+	  (progn ; flyspell is on, turn it off
+	    (message "Flyspell off")
+	    (flyspell-mode -1))
+	  ; else - flyspell is off, turn it on
+	  (flyspell-on-for-buffer-type)))
+(add-hook 'find-file-hook 'flyspell-on-for-buffer-type)
+(add-hook 'org-mode-hook 'turn-on-flyspell)
+;;(add-hook 'org-mode-hook 'flyspell-buffer)
+;;(add-hook 'after-change-major-mode-hook 'flyspell-on-for-buffer-type)
+
+
+(setq ispell-dictionary "british")
 (setq delete-old-versions -1 )		; delete excess backup versions silently
 (setq vc-make-backup-files t )		; make backups file even when in version controlled dir
 (setq backup-directory-alist `(("." . "~/.emacs.d/backups")) ) ; which directory to put backups file
@@ -345,7 +435,7 @@
 
 ;; Org mode TODO types
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "|" "DONE(d)")
+      '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
         (sequence "PENDING(p)" "|" "CLAIMED")
         (sequence "WRITE(W)" "WRITING(w)" "REWRITE(R)" "|" "COMPLETED(c)"))
 )
