@@ -119,7 +119,7 @@
      ("a" . "abstract")
      ("" . "")))
  '(package-selected-packages
-   '(company-tabnine use-package company-quickhelp company rainbow-delimiters markdown-mode helm-bibtex org-ref hl-todo general doom-themes evil-magit magit flycheck blacken python-black pdf-tools org-bullets dashboard evil-visual-mark-mode spacemacs-theme which-key org-agenda-property)))
+   '(lsp-ui lsp-mode rustic evil-collection company-tabnine use-package company-quickhelp company rainbow-delimiters markdown-mode helm-bibtex org-ref hl-todo general doom-themes evil-magit magit flycheck blacken python-black pdf-tools org-bullets dashboard evil-visual-mark-mode spacemacs-theme which-key org-agenda-property)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -144,7 +144,7 @@
 
 (use-package rainbow-delimiters
   :config
-  (add-hook 'python-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'python-mode-hook 'org-mode-hook #'rainbow-delimiters-mode)
 )
 
 
@@ -152,11 +152,12 @@
   :init
   (setq company-idle-delay 0)
   (setq company-show-numbers t)
-  :config
-  (add-hook 'python-mode-hook #'company-mode)
+  ;; :config
+  ;; (add-hook 'python-mode-hook 'rustic-mode-hook #'company-mode)
+  :hook (prog-mode . company-mode)
 )
 
-(use-package company-tabnine)
+(use-package company-tabnine :ensure t)
 (add-to-list 'company-backends #'company-tabnine)
 
 (use-package company-quickhelp
@@ -199,7 +200,8 @@
   :init
   (setq evil-want-C-u-scroll t)
   (setq evil-want-C-i-jump nil)
-  (evil-define-key 'normal evil-jumper-mode-map (kbd "TAB") nil)
+  (setq evil-want-keybinding nil)
+;;  (evil-define-key 'normal evil-jumper-mode-map (kbd "TAB") nil)
   :config
   (evil-mode t)
 )
@@ -264,8 +266,13 @@
 ;; magit (git interface)
 (use-package magit)
 
-;; make evil keybindings work with magit
-(use-package evil-magit)
+
+;; Get evil in magit
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :config
+  (evil-collection-init 'magit))
 
 
 ;; Highlight TODOs
@@ -287,6 +294,8 @@
     (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
     (setq bibtex-completion-bibliography "~/Files/PhD/OrgFiles/refs/references.bib")
     (setq reftex-default-bibliography '("~/Files/PhD/OrgFiles/refs/references.bib"))
+    (helm-delete-action-from-source "Insert citation" helm-source-bibtex)
+    (helm-add-action-to-source "Insert citation" 'helm-bibtex-insert-citation helm-source-bibtex 0)
 )
 
 
@@ -296,6 +305,67 @@
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
+
+
+;; Rust setup
+(use-package rustic
+  :ensure
+  :bind (:map rustic-mode-map
+              ("M-j" . lsp-ui-imenu)
+              ("M-?" . lsp-find-references)
+              ("C-c C-c l" . flycheck-list-errors)
+              ("C-c C-c a" . lsp-execute-code-action)
+              ("C-c C-c r" . lsp-rename)
+              ("C-c C-c q" . lsp-workspace-restart)
+              ("C-c C-c Q" . lsp-workspace-shutdown)
+              ("C-c C-c s" . lsp-rust-analyzer-status))
+  :config
+  ;; uncomment for less flashiness
+  ;; (setq lsp-eldoc-hook nil)
+  ;; (setq lsp-enable-symbol-highlighting nil)
+  ;; (setq lsp-signature-auto-activate nil)
+
+  ;; comment to disable rustfmt on save
+  (setq rustic-format-on-save t)
+  (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook))
+
+(defun rk/rustic-mode-hook ()
+  ;; so that run C-c C-c C-r works without having to confirm, but don't try to
+  ;; save rust buffers that are not file visiting. Once
+  ;; https://github.com/brotzeit/rustic/issues/253 has been resolved this should
+  ;; no longer be necessary.
+  (when buffer-file-name
+    (setq-local buffer-save-without-query t))
+  (add-hook 'before-save-hook 'lsp-format-buffer nil t))
+
+;; Rust setup
+(use-package lsp-mode
+  :ensure
+  :commands lsp
+  :custom
+  ;; what to use when checking on-save. "check" is default, I prefer clippy
+  (lsp-rust-analyzer-cargo-watch-command "clippy")
+  (lsp-eldoc-render-all t)
+  (lsp-idle-delay 0.6)
+  ;; enable / disable the hints as you prefer:
+  (lsp-rust-analyzer-server-display-inlay-hints t)
+  (lsp-rust-analyzer-display-lifetime-elision-hints-enable "skip_trivial")
+  (lsp-rust-analyzer-display-chaining-hints t)
+  (lsp-rust-analyzer-display-lifetime-elision-hints-use-parameter-names nil)
+  (lsp-rust-analyzer-display-closure-return-type-hints t)
+  (lsp-rust-analyzer-display-parameter-hints nil)
+  (lsp-rust-analyzer-display-reborrow-hints nil)
+  :config
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+
+;; Rust setup
+(use-package lsp-ui
+  :ensure
+  :commands lsp-ui-mode
+  :custom
+  (lsp-ui-peek-always-show t)
+  (lsp-ui-sideline-show-hover t)
+  (lsp-ui-doc-enable nil))
 
 
 
@@ -321,6 +391,7 @@
  "o" 'other-window
  "c" 'flycheck-list-errors
  "s" 'flyspell-auto-correct-word
+ "d" 'org-time-stamp-inactive
 )
 
 (general-evil-define-key 'normal 'global
