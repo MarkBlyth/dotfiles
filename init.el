@@ -127,28 +127,56 @@
  ;; If there is more than one, they won't work right.
  )
 
+
+;; Bootstrap straight package manager
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 6))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
+
 ;;  Make use-package do its thing
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-(require 'use-package)
+;; (unless (package-installed-p 'use-package)
+;;   (package-refresh-contents)
+;;   (package-install 'use-package))
+;; (require 'use-package)
 
 ;; Make emacs install packages automatically
-(require 'use-package-ensure)
-(setq use-package-always-ensure t)
+;; (require 'use-package-ensure)
+;; (setq use-package-always-ensure t)
 
+;; Install use-package
+(straight-use-package 'use-package)
+
+;; Configure use-package to use straight.el by default
+(use-package straight
+  :custom
+  (straight-use-package-by-default t))
+
+(use-package org :straight (:type built-in))
 
 ;; Fast insertion of structure templates
 (require 'org-tempo)
 
+(use-package typst-mode
+  :straight (:type git :host github :repo "Ziqi-Yang/typst-mode.el"))
 
 (use-package rainbow-delimiters
-  :config
-  (add-hook 'python-mode-hook 'org-mode-hook #'rainbow-delimiters-mode)
+  :straight t
+  :hook ((prog-mode typst-mode org-mode) . rainbow-delimiters-mode)
 )
 
 
 (use-package company
+  :straight t
   :init
   (setq company-idle-delay 0)
   (setq company-show-numbers t)
@@ -157,11 +185,13 @@
   :hook (prog-mode . company-mode)
 )
 
-(use-package company-tabnine :ensure t)
+(use-package company-tabnine
+  :straight t
+  )
 (add-to-list 'company-backends #'company-tabnine)
 
 (use-package company-quickhelp
-  :ensure t
+  :straight t
   :config
   (company-quickhelp-mode)
 )
@@ -173,6 +203,7 @@
 
 ;; which-key
 (use-package which-key
+  :straight t
   :init
   (setq whick-key-idle-delay 0.05) ; time between pressing a key and bringing up display
   :config
@@ -182,13 +213,14 @@
 
 ;; doom themes
 (use-package doom-themes
+  :straight t
   :defer t
 )
 
 
 ;; undo-tree; gets undo and redo to work in evil
 (use-package undo-tree
-  :ensure t
+  :straight t
   :after evil
   :diminish
   :config
@@ -197,6 +229,7 @@
 
 ;; evil
 (use-package evil
+  :straight t
   :init
   (setq evil-want-C-u-scroll t)
   (setq evil-want-C-i-jump nil)
@@ -209,6 +242,7 @@
 
 ;; helm
 (use-package helm
+  :straight t
   :bind (("M-x" . helm-M-x)
          ("C-x C-f" . helm-find-files)
          ("C-x f" . helm-recentf)
@@ -221,6 +255,7 @@
 
 ;; dashboard
 (use-package dashboard
+  :straight t
   :init
   (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
   :config
@@ -230,6 +265,7 @@
 
 ;; nicer org bullet points
 (use-package org-bullets
+  :straight t
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 )
@@ -238,14 +274,20 @@
 
 ;; blacken, to nicely format python code
 (use-package python-black
+  :straight t
   :demand t
   :after python
 )
 
 
+(use-package julia-mode
+  :straight t
+)
+
 
 ;; flycheck (on-the-fly syntax checking)
 (use-package flycheck
+  :straight t
   :init (global-flycheck-mode)
   :config
 ;;  (setq flycheck-global-modes '(not org-mode))
@@ -264,19 +306,22 @@
 
 
 ;; magit (git interface)
-(use-package magit)
+(use-package magit
+  :straight t
+)
 
 
 ;; Get evil in magit
 (use-package evil-collection
+  :straight t
   :after evil
-  :ensure t
   :config
   (evil-collection-init 'magit))
 
 
 ;; Highlight TODOs
 (use-package hl-todo
+  :straight t
   :init
   (global-hl-todo-mode 1)
 )
@@ -284,11 +329,13 @@
 
 ;; Use org-ref as a bibliography manager
 (use-package org-ref
+  :straight t
     :config
     (setq org-ref-default-bibliography '("~/PhD/OrgFiles/refs/references.bib"))
 )
 ;; Use helm-bibtex to find refs
 (use-package helm-bibtex
+  :straight t
   :config
 ;;    (setq org-latex-pdf-process (quote ("texi2dvi -p -b -V %f")))
     (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
@@ -300,6 +347,7 @@
 
 
 (use-package markdown-mode
+  :straight t
   :commands (markdown-mode gfm-mode)
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
@@ -309,7 +357,7 @@
 
 ;; Rust setup
 (use-package rustic
-  :ensure
+  :straight t
   :bind (:map rustic-mode-map
               ("M-j" . lsp-ui-imenu)
               ("M-?" . lsp-find-references)
@@ -340,7 +388,7 @@
 
 ;; Rust setup
 (use-package lsp-mode
-  :ensure
+  :straight t
   :commands lsp
   :custom
   ;; what to use when checking on-save. "check" is default, I prefer clippy
@@ -360,7 +408,7 @@
 
 ;; Rust setup
 (use-package lsp-ui
-  :ensure
+  :straight t
   :commands lsp-ui-mode
   :custom
   (lsp-ui-peek-always-show t)
@@ -370,7 +418,9 @@
 
 
 ;; Nice key binds
-(use-package general)
+(use-package general
+  :straight t
+  )
 (general-evil-define-key 'normal 'global
  :prefix "SPC"
  "" nil
